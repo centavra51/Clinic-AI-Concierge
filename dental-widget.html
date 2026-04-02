@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dental Booking Widget</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .doctor-card { transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; }
+    .doctor-card.active { border-color: #0f766e; background: #f0fdfa; transform: translateY(-2px); box-shadow: 0 16px 30px rgba(15, 118, 110, 0.12); }
+    .doctor-card:hover:not(.active) { transform: translateY(-4px); }
+    .slot-btn { transition: all 0.2s ease; }
+    .slot-btn:hover { background-color: #111827; color: white; border-color: #111827; transform: translateY(-1px); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+  </style>
+</head>
+<body class="bg-[#FBFBFD] p-4 sm:p-8 font-sans" data-clinic-id="" data-webhook-url="https://auto.amz-creator.com/webhook/dental-ai">
+  <div class="max-w-xl mx-auto bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-6 sm:p-10">
+    <header class="text-center mb-10">
+      <h2 id="booking-title" class="text-3xl font-bold tracking-tight text-gray-900"></h2>
+      <p id="booking-subtitle" class="text-gray-500 mt-2"></p>
+    </header>
+
+    <div id="doctors-list" class="grid grid-cols-3 gap-4 mb-10"></div>
+
+    <div id="slots-section" class="hidden space-y-6">
+      <div class="flex items-center justify-between gap-4">
+        <h3 id="slots-title" class="text-lg font-semibold text-gray-800"></h3>
+        <input
+          type="date"
+          id="selected-date"
+          class="bg-gray-50 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+          onchange="loadSlots()"
+        >
+      </div>
+      <div id="slots-list" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+    </div>
+
+    <button
+      id="ai-chat-button"
+      onclick="openAIChat()"
+      class="mt-12 w-full bg-black hover:bg-gray-800 text-white font-medium py-4 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98]"
+    >
+      <span class="text-xl">✦</span> <span id="ai-chat-label"></span>
+    </button>
+  </div>
+
+  <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/45 p-4">
+    <div class="w-full max-w-md rounded-[2rem] bg-white border border-gray-100 shadow-2xl p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <h3 id="booking-modal-title" class="text-2xl font-bold text-gray-900"></h3>
+          <p id="booking-modal-subtitle" class="text-sm text-gray-500 mt-2"></p>
+        </div>
+        <button type="button" onclick="closeBookingModal()" class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition">×</button>
+      </div>
+
+      <div class="space-y-4">
+        <input
+          id="booking-name"
+          type="text"
+          class="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        >
+        <input
+          id="booking-phone"
+          type="tel"
+          class="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        >
+        <p id="booking-modal-error" class="hidden text-sm text-red-500"></p>
+      </div>
+
+      <div class="mt-6 flex gap-3">
+        <button
+          type="button"
+          onclick="closeBookingModal()"
+          class="flex-1 rounded-2xl border border-gray-200 bg-white px-4 py-3 font-medium text-gray-700 hover:bg-gray-50 transition"
+        >
+          <span id="booking-cancel-label"></span>
+        </button>
+        <button
+          id="booking-submit-button"
+          type="button"
+          onclick="submitBookingFromModal()"
+          class="flex-1 rounded-2xl bg-black px-4 py-3 font-medium text-white hover:bg-gray-800 transition"
+        >
+          <span id="booking-submit-label"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="success-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/45 p-4">
+    <div class="w-full max-w-md rounded-[2rem] bg-white border border-gray-100 shadow-2xl p-6 sm:p-8 text-center">
+      <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-2xl text-emerald-600">✓</div>
+      <h3 id="success-title" class="text-2xl font-bold text-gray-900"></h3>
+      <p id="success-modal-text" class="mt-3 text-sm text-gray-500"></p>
+      <button
+        type="button"
+        onclick="closeSuccessModal()"
+        class="mt-6 w-full rounded-2xl bg-black px-4 py-3 font-medium text-white hover:bg-gray-800 transition"
+      >
+        <span id="success-button-label"></span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const CLINIC_ID = params.get("clinicId") || document.body.dataset.clinicId;
+    const N8N_WEBHOOK_URL = params.get("webhookUrl") || document.body.dataset.webhookUrl || "https://auto.amz-creator.com/webhook/dental-ai";
+    const requestedLang = (params.get("lang") || document.documentElement.lang || "ru").split("-")[0].toLowerCase();
+    const LANG = requestedLang === "en" ? "en" : "ru";
+    document.documentElement.lang = LANG;
+
+    const isTopWindow = window.self === window.top;
+    const EMBED_CHAT = params.get("embedChat") === "1"
+      ? true
+      : params.get("embedChat") === "0"
+        ? false
+        : isTopWindow;
+
+    const I18N = {
+      ru: {
+        pageTitle: "Записаться на приём",
+        pageSubtitle: "Выберите специалиста и удобное время",
+        doctorsLoading: "Загрузка специалистов...",
+        slotsTitle: "Доступное время",
+        slotsLoading: "Ищу время...",
+        slotsEmpty: "Нет свободных окон на эту дату",
+        serverError: "Ошибка связи с сервером",
+        doctorsError: "Ошибка загрузки. Проверьте n8n.",
+        aiChat: "Поговорить с AI-консультантом",
+        bookingModalTitle: "Подтвердить запись",
+        bookingModalSubtitle: "Введите имя и телефон",
+        namePlaceholder: "Ваше имя",
+        phonePlaceholder: "Ваш телефон",
+        cancel: "Отмена",
+        confirm: "Подтвердить",
+        saving: "Сохраняю...",
+        fillFields: "Введите имя и телефон",
+        bookingFailed: "Не удалось завершить запись. Попробуйте еще раз.",
+        successTitle: "Запись подтверждена",
+        successButton: "Отлично",
+        successSummary: "{doctor}, {date} в {time}",
+        modalSlotSummary: "{doctor}, {date} в {time}",
+        chatLoading: "Чат ещё загружается. Попробуйте через секунду."
+      },
+      en: {
+        pageTitle: "Book an appointment",
+        pageSubtitle: "Choose a specialist and a convenient time",
+        doctorsLoading: "Loading doctors...",
+        slotsTitle: "Available time",
+        slotsLoading: "Checking availability...",
+        slotsEmpty: "No free slots for this date",
+        serverError: "Server connection error",
+        doctorsError: "Loading error. Please check n8n.",
+        aiChat: "Talk to the AI concierge",
+        bookingModalTitle: "Confirm booking",
+        bookingModalSubtitle: "Enter your name and phone number",
+        namePlaceholder: "Your name",
+        phonePlaceholder: "Your phone number",
+        cancel: "Cancel",
+        confirm: "Confirm",
+        saving: "Saving...",
+        fillFields: "Enter your name and phone number",
+        bookingFailed: "Could not complete the booking. Please try again.",
+        successTitle: "Booking confirmed",
+        successButton: "Great",
+        successSummary: "{doctor}, {date} at {time}",
+        modalSlotSummary: "{doctor}, {date} at {time}",
+        chatLoading: "Chat is still loading. Please try again in a second."
+      }
+    };
+
+    const TEXT = I18N[LANG];
+    const t = (key, vars = {}) => String(TEXT[key] || key).replace(/\{(\w+)\}/g, (_, name) => String(vars[name] ?? ""));
+
+    let selectedDoctorId = null;
+    let selectedDoctorName = "";
+    let pendingBookingTime = null;
+
+    function applyStaticText() {
+      document.getElementById("booking-title").textContent = TEXT.pageTitle;
+      document.getElementById("booking-subtitle").textContent = TEXT.pageSubtitle;
+      document.getElementById("slots-title").textContent = TEXT.slotsTitle;
+      document.getElementById("ai-chat-label").textContent = TEXT.aiChat;
+      document.getElementById("booking-modal-title").textContent = TEXT.bookingModalTitle;
+      document.getElementById("booking-modal-subtitle").textContent = TEXT.bookingModalSubtitle;
+      document.getElementById("booking-name").placeholder = TEXT.namePlaceholder;
+      document.getElementById("booking-phone").placeholder = TEXT.phonePlaceholder;
+      document.getElementById("booking-cancel-label").textContent = TEXT.cancel;
+      document.getElementById("booking-submit-label").textContent = TEXT.confirm;
+      document.getElementById("success-title").textContent = TEXT.successTitle;
+      document.getElementById("success-button-label").textContent = TEXT.successButton;
+      document.getElementById("doctors-list").innerHTML = `<div class="col-span-3 text-center py-10 text-gray-400">${TEXT.doctorsLoading}</div>`;
+    }
+
+    async function loadDoctors() {
+      try {
+        const res = await fetch(N8N_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "get_doctors", clinic_id: CLINIC_ID, lang: LANG })
+        });
+
+        const data = await res.json();
+        const container = document.getElementById("doctors-list");
+        container.innerHTML = "";
+
+        data.doctors.forEach((doctor) => {
+          const div = document.createElement("div");
+          const parts = String(doctor.full_name || "").split(" ");
+          const firstName = parts[0] || doctor.full_name || "";
+          const secondName = parts[1] || "";
+          div.id = `doc-${doctor.id}`;
+          div.className = "doctor-card cursor-pointer p-3 rounded-[2rem] text-center bg-gray-50";
+          div.innerHTML = `
+            <div class="relative inline-block">
+              <img src="${doctor.avatar_url || 'https://i.pravatar.cc/150'}"
+                   class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full object-cover shadow-sm bg-white"
+                   alt="${doctor.full_name}">
+            </div>
+            <p class="font-bold text-xs sm:text-sm mt-3 text-gray-900 leading-tight">${firstName}<br>${secondName}</p>
+            <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-wider">${doctor.specialty || ""}</p>
+          `;
+          div.onclick = () => selectDoctor(doctor);
+          container.appendChild(div);
+        });
+      } catch (e) {
+        document.getElementById("doctors-list").innerHTML = `<p class='col-span-3 text-red-500 text-center'>${TEXT.doctorsError}</p>`;
+      }
+    }
+
+    function selectDoctor(doctor) {
+      document.querySelectorAll(".doctor-card").forEach((card) => card.classList.remove("active"));
+      document.getElementById(`doc-${doctor.id}`)?.classList.add("active");
+
+      selectedDoctorId = doctor.id;
+      selectedDoctorName = doctor.full_name || "";
+
+      const slotsSection = document.getElementById("slots-section");
+      slotsSection.classList.remove("hidden");
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById("selected-date").valueAsDate = tomorrow;
+
+      loadSlots();
+    }
+
+    async function loadSlots() {
+      const date = document.getElementById("selected-date").value;
+      const container = document.getElementById("slots-list");
+      container.innerHTML = `<div class='col-span-4 text-center text-sm text-gray-400'>${TEXT.slotsLoading}</div>`;
+
+      try {
+        const res = await fetch(N8N_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "get_slots",
+            clinic_id: CLINIC_ID,
+            doctor_id: selectedDoctorId,
+            date,
+            lang: LANG
+          })
+        });
+
+        const data = await res.json();
+        container.innerHTML = "";
+
+        if (!data.available_slots || data.available_slots.length === 0) {
+          container.innerHTML = `<div class='col-span-4 text-center text-sm text-gray-500 py-4'>${TEXT.slotsEmpty}</div>`;
+          return;
+        }
+
+        data.available_slots.forEach((slot) => {
+          const btn = document.createElement("button");
+          btn.className = "slot-btn border border-gray-200 rounded-xl py-3 text-sm font-semibold text-gray-700 bg-white shadow-sm";
+          btn.textContent = slot.time;
+          btn.onclick = () => bookAppointment(slot.time);
+          container.appendChild(btn);
+        });
+      } catch (e) {
+        container.innerHTML = `<div class='col-span-4 text-red-400 text-sm text-center'>${TEXT.serverError}</div>`;
+      }
+    }
+
+    function openBookingModal(time) {
+      pendingBookingTime = time;
+      const date = document.getElementById("selected-date").value;
+      document.getElementById("booking-modal-subtitle").textContent = t("modalSlotSummary", {
+        doctor: selectedDoctorName,
+        date,
+        time
+      });
+      document.getElementById("booking-name").value = "";
+      document.getElementById("booking-phone").value = "";
+      document.getElementById("booking-modal-error").textContent = "";
+      document.getElementById("booking-modal-error").classList.add("hidden");
+      document.getElementById("booking-modal").classList.remove("hidden");
+      document.getElementById("booking-modal").classList.add("flex");
+      setTimeout(() => document.getElementById("booking-name").focus(), 30);
+    }
+
+    function closeBookingModal() {
+      document.getElementById("booking-modal").classList.add("hidden");
+      document.getElementById("booking-modal").classList.remove("flex");
+      document.getElementById("booking-modal-error").textContent = "";
+      document.getElementById("booking-modal-error").classList.add("hidden");
+      pendingBookingTime = null;
+      document.getElementById("booking-modal-subtitle").textContent = TEXT.bookingModalSubtitle;
+    }
+
+    function closeSuccessModal() {
+      document.getElementById("success-modal").classList.add("hidden");
+      document.getElementById("success-modal").classList.remove("flex");
+    }
+
+    async function submitBookingFromModal() {
+      const date = document.getElementById("selected-date").value;
+      const patientName = document.getElementById("booking-name").value.trim();
+      const patientPhone = document.getElementById("booking-phone").value.trim();
+      const error = document.getElementById("booking-modal-error");
+      const submitButton = document.getElementById("booking-submit-button");
+      const submitLabel = document.getElementById("booking-submit-label");
+
+      if (!patientName || !patientPhone || !pendingBookingTime) {
+        error.textContent = TEXT.fillFields;
+        error.classList.remove("hidden");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitLabel.textContent = TEXT.saving;
+
+      try {
+        const res = await fetch(N8N_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "book_appointment",
+            clinic_id: CLINIC_ID,
+            doctor_id: selectedDoctorId,
+            date,
+            time: pendingBookingTime,
+            patient_name: patientName,
+            patient_phone: patientPhone,
+            source: "dental_widget",
+            lang: LANG
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          throw new Error(data.message || TEXT.bookingFailed);
+        }
+
+        closeBookingModal();
+        document.getElementById("success-modal-text").textContent = t("successSummary", {
+          doctor: data.appointment.doctor_name,
+          date: data.appointment.date,
+          time: data.appointment.time
+        });
+        document.getElementById("success-modal").classList.remove("hidden");
+        document.getElementById("success-modal").classList.add("flex");
+      } catch (e) {
+        error.textContent = TEXT.bookingFailed;
+        error.classList.remove("hidden");
+      } finally {
+        submitButton.disabled = false;
+        submitLabel.textContent = TEXT.confirm;
+      }
+    }
+
+    async function bookAppointment(time) {
+      openBookingModal(time);
+    }
+
+    function openAIChat() {
+      if (!EMBED_CHAT && window.self !== window.top) {
+        try {
+          if (window.parent && typeof window.parent.openAIChat === "function") {
+            window.parent.openAIChat();
+            return;
+          }
+          window.parent.postMessage({ type: "open-ai-chat" }, "*");
+          return;
+        } catch (e) {}
+      }
+
+      const host = document.getElementById("ai-chatbot-widget-container");
+      const shadow = host && host.shadowRoot;
+      const trigger = shadow && shadow.getElementById("ct");
+
+      if (trigger) {
+        trigger.click();
+        return;
+      }
+
+      alert(TEXT.chatLoading);
+    }
+
+    window.onload = () => {
+      applyStaticText();
+      const aiChatButton = document.getElementById("ai-chat-button");
+      if (!EMBED_CHAT && aiChatButton) {
+        aiChatButton.style.display = "none";
+      }
+      loadDoctors();
+    };
+  </script>
+  <script>
+    if (EMBED_CHAT) {
+      const script = document.createElement("script");
+      script.src = "widget/chatbot-widget.js";
+      script.dataset.clinicId = CLINIC_ID || "";
+      script.dataset.webhookUrl = N8N_WEBHOOK_URL;
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+</html>
