@@ -337,6 +337,7 @@
         slot: null,
         awaitingContact: false
     };
+    let doctorsCache = null;
 
     const applyText = () => {
         inviteBubble.textContent = text.inviteText;
@@ -357,6 +358,43 @@
         bookingState.doctor = null;
         bookingState.slot = null;
         bookingState.awaitingContact = false;
+    };
+
+    const normalizeDoctorText = (value) => String(value || '')
+        .normalize('NFKC')
+        .toLowerCase()
+        .replace(/[ё]/g, 'е')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const ensureDoctorsCache = async () => {
+        if (Array.isArray(doctorsCache)) return doctorsCache;
+        try {
+            const data = await fetchJson({
+                action: 'get_doctors',
+                clinic_id: CONFIG.clinicId,
+                lang
+            });
+            doctorsCache = Array.isArray(data?.doctors) ? data.doctors : [];
+        } catch {
+            doctorsCache = [];
+        }
+        return doctorsCache;
+    };
+
+    const inferDoctorsFromText = async (content) => {
+        const source = normalizeDoctorText(typeof content === 'string' ? content : content?.message);
+        if (!source) return [];
+
+        const doctors = await ensureDoctorsCache();
+        return doctors.filter((doctor) => {
+            const doctorName = normalizeDoctorText(doctor?.full_name);
+            if (!doctorName) return false;
+            if (source.includes(doctorName)) return true;
+
+            const parts = doctorName.split(' ').filter(Boolean);
+            return parts.some((part) => part.length >= 3 && source.includes(part));
+        });
     };
 
     const extractContactInfo = (message) => {
@@ -442,7 +480,7 @@
         return btn;
     };
 
-    const appendMessage = (content, sender) => {
+    const appendMessage = async (content, sender) => {
         const wrap = document.createElement('div');
         wrap.className = `msg ${sender}`;
 
@@ -468,22 +506,37 @@
 
         cm.appendChild(wrap);
 
-        if (data && ((Array.isArray(data.suggestedDoctors) && data.suggestedDoctors.length) || (Array.isArray(data.suggestedSlots) && data.suggestedSlots.length))) {
+        let suggestedDoctors = data && Array.isArray(data.suggestedDoctors) ? data.suggestedDoctors : [];
+        const suggestedSlots = data && Array.isArray(data.suggestedSlots) ? data.suggestedSlots : [];
+
+        if (sender === 'bot' && suggestedDoctors.length === 0 && suggestedSlots.length === 0 && !bookingState.doctor) {
+            suggestedDoctors = await inferDoctorsFromText(content);
+        }
+
+        if ((suggestedDoctors.length) || suggestedSlots.length) {
             const extra = document.createElement('div');
             extra.className = 'extra-content';
 
-            if (Array.isArray(data.suggestedDoctors)) {
-                data.suggestedDoctors.forEach((doctor) => extra.appendChild(createDoctorCard(doctor)));
+            if (suggestedDoctors.length) {
+                suggestedDoctors.forEach((doctor) => extra.appendChild(createDoctorCard(doctor)));
             }
 
-            if (Array.isArray(data.suggestedSlots) && data.suggestedSlots.length) {
+            if (suggestedSlots.length) {
                 const grid = document.createElement('div');
                 grid.className = 'slots-grid';
-                data.suggestedSlots.forEach((slot) => grid.appendChild(createSlotButton(slot)));
+                suggestedSlots.forEach((slot) => grid.appendChild(createSlotButton(slot)));
                 extra.appendChild(grid);
             }
 
             cm.appendChild(extra);
+        }
+
+        if (sender === 'bot' && suggestedDoctors.length === 1 && suggestedSlots.length === 0) {
+            const nextDoctor = suggestedDoctors[0];
+            const currentDoctorId = bookingState.doctor?.id;
+            if (!currentDoctorId || String(currentDoctorId) !== String(nextDoctor.id)) {
+                queueMicrotask(() => appendDoctorAvailability(nextDoctor));
+            }
         }
 
         cm.scrollTop = cm.scrollHeight;
@@ -498,7 +551,7 @@
         bookingState.slot = null;
         bookingState.awaitingContact = false;
 
-        appendMessage(format(text.checkingSlots, { doctor: doctor.full_name || '' }), 'bot');
+        await appendMessage(format(text.checkingSlots, { doctor: doctor.full_name || '' }), 'bot');
 
         try {
             const data = await fetchJson({
@@ -508,13 +561,13 @@
                 date
             });
 
-            appendMessage({
+            await appendMessage({
                 message: format(text.slotsTitle, { doctor: doctor.full_name || '', date }),
                 suggestedDoctors: [],
                 suggestedSlots: Array.isArray(data.available_slots) ? data.available_slots : []
             }, 'bot');
         } catch {
-            appendMessage(format(text.slotsError, { doctor: doctor.full_name || '' }), 'bot');
+            await appendMessage(format(text.slotsError, { doctor: doctor.full_name || '' }), 'bot');
         }
     };
 
@@ -524,13 +577,13 @@
 
         if (!doctor || !slot) {
             resetBookingState();
-            appendMessage(text.lostState, 'bot');
+            await appendMessage(text.lostState, 'bot');
             return;
         }
 
         const bookingDate = slot.start ? String(slot.start).slice(0, 10) : '';
         const bookingTime = slot.time || '';
-        appendMessage(format(text.bookingProgress, { doctor: doctor.full_name || '', time: bookingTime }), 'bot');
+        await appendMessage(format(text.bookingProgress, { doctor: doctor.full_name || '', time: bookingTime }), 'bot');
 
         try {
             const response = await fetchJson({
@@ -548,14 +601,14 @@
                 throw new Error('Booking failed');
             }
 
-            appendMessage(format(text.bookingSuccess, {
+            await appendMessage(format(text.bookingSuccess, {
                 doctor: doctor.full_name || '',
                 date: bookingDate,
                 time: bookingTime
             }), 'bot');
             resetBookingState();
         } catch {
-            appendMessage(text.bookingError, 'bot');
+            await appendMessage(text.bookingError, 'bot');
         }
     };
 
@@ -564,12 +617,12 @@
         if (!message) return;
 
         ci.value = '';
-        appendMessage(message, 'user');
+        await appendMessage(message, 'user');
 
         if (bookingState.awaitingContact && bookingState.doctor && bookingState.slot) {
             const contact = extractContactInfo(message);
             if (!contact) {
-                appendMessage(text.contactRetry, 'bot');
+                await appendMessage(text.contactRetry, 'bot');
                 return;
             }
             await submitChatBooking(contact);
@@ -583,9 +636,9 @@
                 message,
                 sessionId: sid
             });
-            appendMessage(json.data || json, 'bot');
+            await appendMessage(json.data || json, 'bot');
         } catch {
-            appendMessage(text.connectionError, 'bot');
+            await appendMessage(text.connectionError, 'bot');
         }
     };
 
