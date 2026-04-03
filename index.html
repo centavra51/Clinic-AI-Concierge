@@ -224,8 +224,10 @@
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(215, 155, 45, 0.16), transparent 22%),
-        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.84));
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.28), transparent 24%),
+        radial-gradient(circle at left 18%, rgba(11, 107, 97, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,250,0.92));
+      border: 1px solid rgba(11, 107, 97, 0.14);
     }
 
     .hero-main::after {
@@ -291,6 +293,13 @@
       font: 15px/1.75 Arial, sans-serif;
     }
 
+    .hero-copy {
+      max-width: 34rem;
+      font-size: 17px;
+      line-height: 1.8;
+      color: #33484d;
+    }
+
     .hero-actions,
     .assistant-actions {
       display: flex;
@@ -307,17 +316,18 @@
     }
 
     .stat {
-      padding: 18px;
+      padding: 20px 18px;
       border-radius: 22px;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.82));
+      border: 1px solid rgba(11, 107, 97, 0.12);
       box-shadow: var(--shadow-soft);
     }
 
     .stat strong {
       display: block;
-      font-size: 28px;
-      margin-bottom: 6px;
+      font-size: 30px;
+      margin-bottom: 8px;
+      color: var(--brand-deep);
     }
 
     .stat span {
@@ -342,7 +352,7 @@
       overflow: hidden;
       border-radius: 30px;
       background:
-        linear-gradient(180deg, rgba(11, 107, 97, 0.08), rgba(8, 76, 69, 0.02)),
+        linear-gradient(180deg, rgba(93, 33, 15, 0.18), rgba(8, 76, 69, 0.06)),
         url("https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1400&auto=format&fit=crop") center/cover;
     }
 
@@ -351,18 +361,26 @@
       left: 24px;
       bottom: 24px;
       max-width: 340px;
-      padding: 16px 18px;
+      padding: 18px 20px;
       border-radius: 22px;
       color: #fff;
-      background: rgba(16, 32, 39, 0.76);
+      background: linear-gradient(180deg, rgba(120, 35, 18, 0.88), rgba(66, 18, 12, 0.88));
+      border: 1px solid rgba(255, 211, 178, 0.18);
       backdrop-filter: blur(12px);
       font-family: Arial, sans-serif;
+      box-shadow: 0 20px 40px rgba(66, 18, 12, 0.28);
     }
 
     .portrait-badge strong {
       display: block;
-      margin-bottom: 6px;
-      font-size: 16px;
+      margin-bottom: 8px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .feature-panel {
+      background: linear-gradient(180deg, rgba(255,246,241,0.92), rgba(255,255,255,0.88));
+      border: 1px solid rgba(162, 72, 43, 0.12);
     }
 
     .feature-grid {
@@ -374,14 +392,15 @@
     .feature {
       padding: 18px;
       border-radius: 22px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(162, 72, 43, 0.12);
+      background: rgba(255, 255, 255, 0.92);
     }
 
     .feature strong {
       display: block;
       margin-bottom: 8px;
       font-size: 18px;
+      color: #7b2f1d;
     }
 
     .section {
@@ -404,6 +423,10 @@
       max-width: 12ch;
     }
 
+    .section-head p {
+      max-width: 38rem;
+    }
+
     .assurance,
     .proof-grid,
     .offer-grid {
@@ -422,12 +445,40 @@
       box-shadow: var(--shadow-soft);
     }
 
+    .assurance-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,251,250,0.9));
+      border: 1px solid rgba(11, 107, 97, 0.14);
+    }
+
+    .assurance-card::after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 0 18px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+    }
+
     .assurance-card strong,
     .proof-card strong,
     .offer-card strong {
       display: block;
       margin: 14px 0 10px;
       font-size: 20px;
+    }
+
+    .assurance-card strong {
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .proof-card,
+    .offer-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,252,252,0.84));
     }
 
     .experience-grid {
@@ -495,6 +546,7 @@
     .booking-card {
       padding: 22px;
       background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.88));
+      border: 1px solid rgba(11, 107, 97, 0.14);
     }
 
     .booking-caption {
@@ -531,6 +583,9 @@
       gap: 20px;
       align-items: center;
       font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.18), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(244,247,246,0.92));
     }
 
     .footer-card strong {
@@ -618,15 +673,15 @@
         <div class="brand-mark"><span class="brand-monogram">AI</span></div>
         <div class="brand-copy">
           <strong>Clinic AI Concierge</strong>
-          <span>Private digital concierge for premium clinics</span>
+          <span>AI-ассистент, который отвечает пациентам и возвращает пропущенные записи</span>
         </div>
       </div>
 
       <div class="topbar-actions">
         <nav class="nav">
-          <a href="#value">Почему это работает</a>
-          <a href="#experience">AI + запись</a>
-          <a href="#offer" class="nav-cta">Показать experience</a>
+          <a href="#value">Что вы получите</a>
+          <a href="#experience">Как это работает</a>
+          <a href="#offer" class="nav-cta">Получить демо</a>
         </nav>
         <div class="lang-switch" aria-label="Language switcher">
           <a href="./index.html" class="active" aria-current="page">RU</a>
@@ -637,29 +692,29 @@
 
     <section class="hero">
       <article class="hero-main card">
-        <div class="eyebrow">Премиальный AI-сервис для клиники</div>
-        <h1>Стоматология, в которую записываются быстро, уверенно и без потери контакта</h1>
+        <div class="eyebrow">AI-ассистент для роста записей</div>
+        <h1>Вы теряете пациентов каждый день — мы возвращаем их автоматически</h1>
         <p class="hero-copy">
-          Это не просто форма записи, а цифровой concierge-сценарий для клиники. AI-консультант помогает пациенту сориентироваться, показывает реальных врачей и свободное время, снимает сомнения в момент выбора и доводит до подтверждённого визита в одном аккуратном интерфейсе.
+          AI-ассистент отвечает пациентам 24/7, консультирует и записывает на приём без администратора.
         </p>
 
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#experience">Посмотреть в действии</a>
+          <a class="btn btn-primary" href="#experience">Получить демо для моей клиники</a>
           <a class="btn btn-secondary" href="javascript:void(0)" onclick="openAIChat()">Поговорить с AI-консультантом</a>
         </div>
 
         <div class="stats">
           <div class="stat">
             <strong>24/7</strong>
-              <span>пациент получает ответы и может выбрать визит в любое время суток</span>
+              <span>пациенты получают ответы и могут записаться в любое время суток</span>
           </div>
           <div class="stat">
-              <strong>1 экран</strong>
-              <span>чат, выбор врача, слоты и подтверждение собраны в один премиальный путь пациента</span>
+              <strong>Без потерь</strong>
+              <span>обращения не висят без ответа, пока администратор занят или офлайн</span>
           </div>
           <div class="stat">
-              <strong>+ trust</strong>
-              <span>клиника выглядит современно, дорого и вызывает больше доверия уже с первого касания</span>
+              <strong>Просто</strong>
+              <span>он просто отвечает клиентам вместо администратора и доводит до записи</span>
           </div>
         </div>
       </article>
@@ -667,28 +722,28 @@
       <div class="hero-side">
         <div class="portrait card">
           <div class="portrait-badge">
-            <strong>Digital concierge для клиники</strong>
-            <span>Пациент получает ощущение персонального сервиса ещё до визита: задаёт вопрос, видит релевантных врачей, выбирает свободное время и подтверждает запись без звонков и ручной переписки.</span>
+            <strong>Вы теряете деньги, если пациенту не отвечают сразу</strong>
+            <span>Когда клиника не отвечает ночью, пропускает сообщения или перегружает администратора, пациент уходит туда, где ответ дали быстрее.</span>
           </div>
         </div>
 
         <div class="feature-panel card">
           <div class="feature-grid">
             <div class="feature">
-              <strong>Меньше потерянных обращений</strong>
-              <p>Пациент не уходит с сайта, пока ждёт ответа администратора или обратного звонка.</p>
+              <strong>Не отвечаете ночью</strong>
+              <p>Пока клиника спит, пациенты пишут конкурентам и записываются туда, где ответ приходит сразу.</p>
             </div>
             <div class="feature">
-              <strong>Единый сценарий до записи</strong>
-              <p>Пациент может начать с вопроса в чате или сразу перейти к врачу и слотам, не теряя контекст.</p>
+              <strong>Пропускаете сообщения</strong>
+              <p>Каждое непрочитанное сообщение или поздний ответ превращается в потерянную запись и упущенную выручку.</p>
             </div>
             <div class="feature">
-              <strong>Реальное свободное время</strong>
-              <p>Пациент видит живые слоты в календаре, а не обещание “мы вам перезвоним”.</p>
+              <strong>Администратор не успевает</strong>
+              <p>Когда поток обращений растёт, часть вопросов зависает, а часть пациентов просто не дожидается ответа.</p>
             </div>
             <div class="feature">
-              <strong>Готово к масштабированию</strong>
-              <p>Одна продуктовая логика может обслуживать сеть клиник, сохраняя отдельный бренд и данные каждой площадки.</p>
+              <strong>AI берёт это на себя</strong>
+              <p>Он отвечает, помогает выбрать врача, показывает свободное время и доводит пациента до записи без ручной переписки.</p>
             </div>
           </div>
         </div>
@@ -697,78 +752,78 @@
 
     <section class="section" id="value">
       <div class="section-head">
-        <h2>Почему клиники выбирают именно такой сценарий</h2>
+        <h2>Что вы получите</h2>
         <p>
-          Клиника получает не очередной виджет, а понятный коммерческий инструмент: он сокращает путь пациента до записи, усиливает доверие к бренду и делает цифровой сервис частью премиального позиционирования.
+          Это не сложная AI-автоматизация и не очередной “умный виджет”. Это инструмент, который просто отвечает клиентам вместо администратора и помогает клинике не терять записи.
         </p>
       </div>
 
       <div class="assurance">
         <article class="assurance-card">
           <div class="eyebrow">01</div>
-          <strong>Конвертирует лучше стандартной формы</strong>
-          <p>Когда AI сопровождает пациента и предлагает следующий шаг, запись происходит быстрее и с меньшим числом брошенных обращений.</p>
+          <strong>+20–40% больше записей</strong>
+          <p>Пациенты получают ответ сразу и быстрее доходят до записи, вместо того чтобы уходить с сайта или откладывать решение.</p>
         </article>
         <article class="assurance-card">
           <div class="eyebrow">02</div>
-          <strong>Снимает нагрузку с администраторов</strong>
-          <p>Повторяющиеся вопросы, первичная навигация и подбор удобного времени уходят в аккуратный автоматизированный сценарий.</p>
+          <strong>Ответы 24/7</strong>
+          <p>Клиника не теряет обращения вечером, ночью, в выходные и в часы, когда команда не успевает обработать все сообщения.</p>
         </article>
         <article class="assurance-card">
           <div class="eyebrow">03</div>
-          <strong>Усиливает ощущение премиального сервиса</strong>
-          <p>Даже до первого визита пациент видит современную, организованную и технологичную клинику, которой легко доверить следующий шаг.</p>
+          <strong>Меньше нагрузки на персонал</strong>
+          <p>Повторяющиеся вопросы, первичная консультация и путь до записи обрабатываются автоматически, без перегруза администратора.</p>
         </article>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head">
-        <h2>Как это воспринимает пациент</h2>
+        <h2>Как это выглядит для пациента</h2>
         <p>
-          Важна не только сама запись, но и то, как ощущается путь до неё. Пользователь видит понятный маршрут: спросить, понять, выбрать врача, увидеть время и подтвердить визит без трения и неопределённости.
+          Для пациента всё выглядит просто: он задаёт вопрос, сразу получает ответ, выбирает врача и время, а потом записывается без звонков и ожидания.
         </p>
       </div>
 
       <div class="proof-grid">
         <article class="proof-card">
           <div class="eyebrow">Доверие</div>
-          <strong>«Мне сразу понятно, что делать дальше»</strong>
-          <p>Чат и запись работают как единая система и ведут пациента по цельному сценарию без путаницы между окнами и формами.</p>
+          <strong>«Мне сразу ответили»</strong>
+          <p>Пациент не ждёт, пока кто-то освободится. Он получает ответ в момент обращения и не уходит к другой клинике.</p>
         </article>
         <article class="proof-card">
           <div class="eyebrow">Скорость</div>
-          <strong>«Я вижу реальное время, а не форму обратного звонка»</strong>
-          <p>Это повышает ощущение прозрачности и резко сокращает путь от интереса к фактической записи.</p>
+          <strong>«Я сразу вижу, когда можно прийти»</strong>
+          <p>Пациенту не нужно оставлять заявку и ждать звонка. Он быстрее принимает решение и доходит до записи.</p>
         </article>
         <article class="proof-card">
           <div class="eyebrow">Имидж</div>
-          <strong>«Клиника выглядит современной и хорошо организованной»</strong>
-          <p>Такой опыт сам становится частью бренда и усиливает ценность услуг ещё до общения с персоналом.</p>
+          <strong>«Клиника отвечает быстро и выглядит современно»</strong>
+          <p>Такой сценарий повышает доверие уже с первого касания и делает сервис сильнее ещё до визита пациента.</p>
         </article>
       </div>
     </section>
 
     <section class="section" id="experience">
       <div class="section-head">
-        <h2>AI-консультант и запись на одном экране</h2>
+        <h2>AI-ассистент и запись на одном экране</h2>
         <p>
-          Это формат, который особенно хорошо работает на презентации для владельца клиники: слева интеллектуальный concierge, справа живая запись. Пациент может задать вопрос обычным языком или сразу перейти к выбору врача и времени.
+          Слева ассистент отвечает на вопросы пациента, справа помогает быстро выбрать врача и время. Всё понятно с первого экрана и без лишних шагов.
         </p>
       </div>
 
       <div class="experience-grid">
         <aside class="assistant-card">
-          <div class="eyebrow">AI concierge</div>
-          <h3>Помогает выбрать врача и доводит пациента до записи.</h3>
+          <div class="eyebrow">AI-ассистент</div>
+          <h3>Он просто отвечает клиентам вместо администратора.</h3>
           <p>
-            Пациент описывает задачу обычным языком, а AI-консультант берёт на себя первичную навигацию, снижает сомнения и переводит интерес в конкретный визит. Для клиники это означает более дорогой клиентский опыт уже на этапе первого касания.
+            Пациент пишет обычным языком, а ассистент отвечает, помогает сориентироваться, подбирает врача и переводит диалог в запись. Без сложных терминов, без ручной переписки и без потери обращений.
           </p>
 
           <div class="assistant-points">
-            <div class="assistant-point">Подсказывает, к какому специалисту лучше обратиться по запросу пациента.</div>
-            <div class="assistant-point">Показывает реальных врачей именно этой клиники, а не абстрактные советы.</div>
-            <div class="assistant-point">Переводит диалог в конкретную запись, не оставляя пациента на этапе «я подумаю позже».</div>
+            <div class="assistant-point">Отвечает пациенту сразу, даже ночью и в выходные.</div>
+            <div class="assistant-point">Помогает выбрать нужного врача и показывает доступное время.</div>
+            <div class="assistant-point">Доводит диалог до записи, а не оставляет пациента на этапе “я подумаю”.</div>
           </div>
 
           <div class="prompt-list">
@@ -785,8 +840,8 @@
 
         <div class="booking-card card" id="offer">
           <div class="booking-caption">
-            <span>Пациент видит короткий и понятный путь к записи: выбрать врача, увидеть живое свободное время и подтвердить визит за несколько шагов.</span>
-            <span>Для клиники это означает более сильный digital-сервис, меньше потерянных обращений и более высокий уровень доверия к бренду.</span>
+            <span>Пациенту не нужно ждать звонка: он сразу выбирает врача, видит свободное время и записывается за несколько шагов.</span>
+            <span>Для клиники это значит больше записей, меньше потерянных обращений и меньше нагрузки на администраторов.</span>
           </div>
           <div class="booking-shell">
             <iframe id="booking-frame" src="./dental-widget.html?embedChat=0" title="Dental Booking Widget" loading="lazy"></iframe>
@@ -797,36 +852,36 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>Что получает клиника как продукт</h2>
+        <h2>Почему это выгодно клинике</h2>
         <p>
-          Решение подходит и для презентации на переговорах, и как основа production-лендинга. Оно демонстрирует не только красивый интерфейс, но и прикладную бизнес-логику, которая помогает клинике расти аккуратно и системно.
+          Решение помогает клинике забирать больше обращений в запись, не расширяя команду и не теряя пациентов из-за медленного ответа.
         </p>
       </div>
 
       <div class="offer-grid">
         <article class="offer-card">
-          <div class="eyebrow">Коммерческая ценность</div>
-          <strong>Повышение конверсии в запись</strong>
-          <p>Пациент быстрее доходит до действия, потому что получает ответы, ориентиры и свободное время в одном интерфейсе.</p>
+          <div class="eyebrow">Больше выручки</div>
+          <strong>Вы не теряете тёплые обращения</strong>
+          <p>Пациент получает ответ сразу и с большей вероятностью записывается именно к вам, а не уходит к конкурентам.</p>
         </article>
         <article class="offer-card">
-          <div class="eyebrow">Операционная ценность</div>
-          <strong>Автоматизация первичного контакта</strong>
-          <p>Существенная часть первичных касаний закрывается без потери качества коммуникации и без лишней нагрузки на команду.</p>
+          <div class="eyebrow">Меньше рутины</div>
+          <strong>Команда не тонет в однотипных сообщениях</strong>
+          <p>Ассистент берёт на себя первый контакт, типовые вопросы и навигацию до записи, разгружая администраторов.</p>
         </article>
         <article class="offer-card">
-          <div class="eyebrow">Продуктовая ценность</div>
-          <strong>Масштабирование на новые клиники</strong>
-          <p>Один backend, единая логика и отдельные брендовые оболочки позволяют быстро адаптировать решение под новые площадки.</p>
+          <div class="eyebrow">Понятный сервис</div>
+          <strong>Клиника выглядит быстрее, современнее и удобнее</strong>
+          <p>Первое касание становится сильнее: пациенту легко написать, легко получить ответ и легко записаться без лишнего ожидания.</p>
         </article>
       </div>
     </section>
 
     <footer class="footer-card card">
       <div>
-        <strong>Готово для презентации владельцу клиники и для быстрого запуска в работу.</strong>
+        <strong>Готово для презентации владельцу клиники: боль, решение и результат понятны с первого экрана.</strong>
         <p>
-          Этот лендинг работает как коммерческая витрина продукта: он показывает ценность для пациента, усиливает образ современной клиники и демонстрирует, как цифровой concierge помогает увеличивать запись без лишней нагрузки на команду.
+          Этот лендинг теперь объясняет оффер простыми словами: клиника теряет пациентов из-за медленного ответа, AI-ассистент отвечает вместо администратора и помогает получать больше записей без перегруза команды.
         </p>
       </div>
       <div class="footer-badge">Premium AI Concierge</div>

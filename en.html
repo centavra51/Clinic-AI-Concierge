@@ -224,8 +224,10 @@
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(215, 155, 45, 0.16), transparent 22%),
-        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.84));
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.28), transparent 24%),
+        radial-gradient(circle at left 18%, rgba(11, 107, 97, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,250,0.92));
+      border: 1px solid rgba(11, 107, 97, 0.14);
     }
 
     .hero-main::after {
@@ -291,6 +293,13 @@
       font: 15px/1.75 Arial, sans-serif;
     }
 
+    .hero-copy {
+      max-width: 34rem;
+      font-size: 17px;
+      line-height: 1.8;
+      color: #33484d;
+    }
+
     .hero-actions,
     .assistant-actions {
       display: flex;
@@ -307,17 +316,18 @@
     }
 
     .stat {
-      padding: 18px;
+      padding: 20px 18px;
       border-radius: 22px;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.82));
+      border: 1px solid rgba(11, 107, 97, 0.12);
       box-shadow: var(--shadow-soft);
     }
 
     .stat strong {
       display: block;
-      font-size: 28px;
-      margin-bottom: 6px;
+      font-size: 30px;
+      margin-bottom: 8px;
+      color: var(--brand-deep);
     }
 
     .stat span {
@@ -342,7 +352,7 @@
       overflow: hidden;
       border-radius: 30px;
       background:
-        linear-gradient(180deg, rgba(11, 107, 97, 0.08), rgba(8, 76, 69, 0.02)),
+        linear-gradient(180deg, rgba(93, 33, 15, 0.18), rgba(8, 76, 69, 0.06)),
         url("https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1400&auto=format&fit=crop") center/cover;
     }
 
@@ -351,18 +361,26 @@
       left: 24px;
       bottom: 24px;
       max-width: 340px;
-      padding: 16px 18px;
+      padding: 18px 20px;
       border-radius: 22px;
       color: #fff;
-      background: rgba(16, 32, 39, 0.76);
+      background: linear-gradient(180deg, rgba(120, 35, 18, 0.88), rgba(66, 18, 12, 0.88));
+      border: 1px solid rgba(255, 211, 178, 0.18);
       backdrop-filter: blur(12px);
       font-family: Arial, sans-serif;
+      box-shadow: 0 20px 40px rgba(66, 18, 12, 0.28);
     }
 
     .portrait-badge strong {
       display: block;
-      margin-bottom: 6px;
-      font-size: 16px;
+      margin-bottom: 8px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .feature-panel {
+      background: linear-gradient(180deg, rgba(255,246,241,0.92), rgba(255,255,255,0.88));
+      border: 1px solid rgba(162, 72, 43, 0.12);
     }
 
     .feature-grid {
@@ -374,14 +392,15 @@
     .feature {
       padding: 18px;
       border-radius: 22px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(162, 72, 43, 0.12);
+      background: rgba(255, 255, 255, 0.92);
     }
 
     .feature strong {
       display: block;
       margin-bottom: 8px;
       font-size: 18px;
+      color: #7b2f1d;
     }
 
     .section {
@@ -404,6 +423,10 @@
       max-width: 12ch;
     }
 
+    .section-head p {
+      max-width: 38rem;
+    }
+
     .assurance,
     .proof-grid,
     .offer-grid {
@@ -422,12 +445,40 @@
       box-shadow: var(--shadow-soft);
     }
 
+    .assurance-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,251,250,0.9));
+      border: 1px solid rgba(11, 107, 97, 0.14);
+    }
+
+    .assurance-card::after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 0 18px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+    }
+
     .assurance-card strong,
     .proof-card strong,
     .offer-card strong {
       display: block;
       margin: 14px 0 10px;
       font-size: 20px;
+    }
+
+    .assurance-card strong {
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .proof-card,
+    .offer-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,252,252,0.84));
     }
 
     .experience-grid {
@@ -495,6 +546,7 @@
     .booking-card {
       padding: 22px;
       background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.88));
+      border: 1px solid rgba(11, 107, 97, 0.14);
     }
 
     .booking-caption {
@@ -531,6 +583,9 @@
       gap: 20px;
       align-items: center;
       font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.18), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(244,247,246,0.92));
     }
 
     .footer-card strong {
@@ -618,15 +673,15 @@
         <div class="brand-mark"><span class="brand-monogram">AI</span></div>
         <div class="brand-copy">
           <strong>Clinic AI Concierge</strong>
-          <span>Private digital concierge for premium clinics</span>
+          <span>AI assistant that answers patients and recovers missed bookings</span>
         </div>
       </div>
 
       <div class="topbar-actions">
         <nav class="nav">
-          <a href="#value">Why It Works</a>
-          <a href="#experience">AI + Booking</a>
-          <a href="#offer" class="nav-cta">Show The Experience</a>
+          <a href="#value">What You Get</a>
+          <a href="#experience">How It Works</a>
+          <a href="#offer" class="nav-cta">Get A Demo</a>
         </nav>
         <div class="lang-switch" aria-label="Language switcher">
           <a href="./index.html">RU</a>
@@ -637,29 +692,29 @@
 
     <section class="hero">
       <article class="hero-main card">
-        <div class="eyebrow">Premium AI service for clinics</div>
-        <h1>A dental experience where patients book quickly, confidently, and without friction</h1>
+        <div class="eyebrow">AI assistant for more bookings</div>
+        <h1>You lose patients every day. We bring them back automatically.</h1>
         <p class="hero-copy">
-          This is more than a booking form. It is a digital concierge journey for the clinic: the AI consultant helps patients choose the right doctor, shows real availability, removes hesitation at the point of decision, and leads them to a confirmed appointment in one polished interface.
+          The AI assistant replies to patients 24/7, answers questions, and books appointments without an administrator.
         </p>
 
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#experience">See It In Action</a>
-          <a class="btn btn-secondary" href="javascript:void(0)" onclick="openAIChat()">Talk To The AI Concierge</a>
+          <a class="btn btn-primary" href="#experience">Get a demo for my clinic</a>
+          <a class="btn btn-secondary" href="javascript:void(0)" onclick="openAIChat()">Talk to the AI assistant</a>
         </div>
 
         <div class="stats">
           <div class="stat">
             <strong>24/7</strong>
-              <span>patients can ask questions and choose an appointment at any time of day</span>
+              <span>patients get answers and can book at any time of day</span>
           </div>
           <div class="stat">
-              <strong>1 journey</strong>
-              <span>chat, doctor selection, live slots, and booking confirmation are combined in one premium patient flow</span>
+              <strong>No leaks</strong>
+              <span>enquiries do not sit unanswered while the administrator is busy or offline</span>
           </div>
           <div class="stat">
-              <strong>+ trust</strong>
-              <span>the clinic looks modern, premium, and credible from the very first interaction</span>
+              <strong>Simple</strong>
+              <span>it simply replies to patients instead of the administrator and leads them to booking</span>
           </div>
         </div>
       </article>
@@ -667,28 +722,28 @@
       <div class="hero-side">
         <div class="portrait card">
           <div class="portrait-badge">
-            <strong>Digital concierge for the clinic</strong>
-            <span>The patient feels a high-end level of care before the first visit: they ask a question, see relevant doctors, choose available time, and confirm a visit without calls or back-and-forth messaging.</span>
+            <strong>You lose money when patients do not get an immediate reply</strong>
+            <span>If the clinic does not answer at night, misses messages, or overloads the front desk, patients go to the clinic that replies faster.</span>
           </div>
         </div>
 
         <div class="feature-panel card">
           <div class="feature-grid">
             <div class="feature">
-              <strong>Fewer lost enquiries</strong>
-              <p>Patients do not leave while waiting for an administrator to reply or call back.</p>
+              <strong>You do not answer at night</strong>
+              <p>While your clinic sleeps, patients message competitors and book wherever the reply comes first.</p>
             </div>
             <div class="feature">
-              <strong>One path to booking</strong>
-              <p>Patients can start in chat or go straight to doctors and slots without losing context.</p>
+              <strong>You miss messages</strong>
+              <p>Every unread message or delayed reply turns into a lost booking and lost revenue.</p>
             </div>
             <div class="feature">
-              <strong>Live availability</strong>
-              <p>Patients see real calendar slots instead of the usual “we will call you back” promise.</p>
+              <strong>Your administrator cannot keep up</strong>
+              <p>When enquiry volume grows, some patients wait too long and some simply leave.</p>
             </div>
             <div class="feature">
-              <strong>Built to scale</strong>
-              <p>One product logic can support multiple clinics while preserving each brand and data set separately.</p>
+              <strong>The AI handles it</strong>
+              <p>It replies, helps choose the right doctor, shows free time, and moves the patient to booking without manual back-and-forth.</p>
             </div>
           </div>
         </div>
@@ -697,78 +752,78 @@
 
     <section class="section" id="value">
       <div class="section-head">
-        <h2>Why clinics choose this exact model</h2>
+        <h2>What you get</h2>
         <p>
-          The clinic gets more than another widget. It gets a commercial tool that shortens the path to booking, strengthens brand trust, and turns digital service into part of a premium positioning strategy.
+          This is not complicated AI automation and not another “smart widget.” It is a tool that simply replies to patients instead of the administrator and helps the clinic stop losing bookings.
         </p>
       </div>
 
       <div class="assurance">
         <article class="assurance-card">
           <div class="eyebrow">01</div>
-          <strong>Converts better than a standard form</strong>
-          <p>When AI guides the patient and presents the next step clearly, bookings happen faster and with fewer drop-offs.</p>
+          <strong>20-40% more bookings</strong>
+          <p>Patients get an immediate reply and move to booking faster instead of leaving the site or delaying the decision.</p>
         </article>
         <article class="assurance-card">
           <div class="eyebrow">02</div>
-          <strong>Reduces front-desk workload</strong>
-          <p>Repeated questions, first-touch navigation, and time selection move into an elegant automated scenario.</p>
+          <strong>Replies 24/7</strong>
+          <p>Your clinic does not lose enquiries in the evening, at night, on weekends, or during busy hours.</p>
         </article>
         <article class="assurance-card">
           <div class="eyebrow">03</div>
-          <strong>Feels like a premium service</strong>
-          <p>Even before the first visit, the patient sees a clinic that looks modern, organized, and easy to trust.</p>
+          <strong>Less pressure on staff</strong>
+          <p>Repeated questions, first-touch consultation, and the path to booking are handled automatically without overloading the front desk.</p>
         </article>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head">
-        <h2>How the patient experiences it</h2>
+        <h2>How it looks to the patient</h2>
         <p>
-          What matters is not only that booking works, but how the journey feels. The user sees a clear path: ask, understand, choose a doctor, see available time, and confirm a visit without friction or uncertainty.
+          For the patient it feels simple: ask a question, get an answer right away, choose a doctor and time, and book without calls or waiting.
         </p>
       </div>
 
       <div class="proof-grid">
         <article class="proof-card">
           <div class="eyebrow">Trust</div>
-          <strong>“I immediately understand what to do next.”</strong>
-          <p>Chat and booking work as one system, guiding the patient through a single coherent flow rather than competing interfaces.</p>
+          <strong>"They replied right away."</strong>
+          <p>The patient does not wait for someone to become available. They get an answer at the moment of enquiry and do not leave for another clinic.</p>
         </article>
         <article class="proof-card">
           <div class="eyebrow">Speed</div>
-          <strong>“I can see real availability, not a callback form.”</strong>
-          <p>This increases transparency and dramatically shortens the path from interest to confirmed booking.</p>
+          <strong>"I can immediately see when I can come."</strong>
+          <p>The patient does not need to leave a request and wait for a callback. They decide faster and reach booking sooner.</p>
         </article>
         <article class="proof-card">
           <div class="eyebrow">Brand</div>
-          <strong>“The clinic feels modern and well organized.”</strong>
-          <p>This kind of experience becomes part of the brand itself and increases the perceived value of the clinic before any human contact happens.</p>
+          <strong>"The clinic replies fast and feels modern."</strong>
+          <p>This flow builds trust from the first touchpoint and makes the service feel stronger even before the visit happens.</p>
         </article>
       </div>
     </section>
 
     <section class="section" id="experience">
       <div class="section-head">
-        <h2>AI concierge and booking on one screen</h2>
+        <h2>AI assistant and booking on one screen</h2>
         <p>
-          This is the format that works best when presenting to a clinic owner: intelligent concierge on the left, live booking on the right. The patient can type naturally or go straight to choosing a doctor and time.
+          On the left, the assistant answers patient questions. On the right, it helps them quickly choose the right doctor and time. Everything is clear from the first screen.
         </p>
       </div>
 
       <div class="experience-grid">
         <aside class="assistant-card">
-          <div class="eyebrow">AI concierge</div>
-          <h3>Helps patients choose the right doctor and leads them to booking.</h3>
+          <div class="eyebrow">AI assistant</div>
+          <h3>It simply replies to patients instead of the administrator.</h3>
           <p>
-            The patient explains what they need in natural language, while the AI consultant handles first-touch guidance, reduces hesitation, and moves interest toward a concrete visit. For the clinic, that means a more premium client experience from the very first touchpoint.
+            The patient writes in natural language, and the assistant replies, helps them understand what they need, suggests the right doctor, and moves the conversation toward booking. No jargon, no manual back-and-forth, no missed enquiries.
           </p>
 
           <div class="assistant-points">
-            <div class="assistant-point">Suggests which specialist best fits the patient's request.</div>
-            <div class="assistant-point">Shows real doctors from this clinic instead of generic advice.</div>
-            <div class="assistant-point">Turns dialogue into a confirmed booking instead of leaving the patient at “I will think about it later”.</div>
+            <div class="assistant-point">Replies right away, even at night and on weekends.</div>
+            <div class="assistant-point">Helps choose the right doctor and shows available time.</div>
+            <div class="assistant-point">Moves the conversation to booking instead of leaving the patient at "I will think about it."</div>
           </div>
 
           <div class="prompt-list">
@@ -778,15 +833,15 @@
           </div>
 
           <div class="assistant-actions">
-            <a class="btn btn-primary" href="javascript:void(0)" onclick="openAIChat()">Open AI Chat</a>
-            <a class="btn btn-secondary" href="#offer">View Booking Module</a>
+            <a class="btn btn-primary" href="javascript:void(0)" onclick="openAIChat()">Open AI chat</a>
+            <a class="btn btn-secondary" href="#offer">View booking module</a>
           </div>
         </aside>
 
         <div class="booking-card card" id="offer">
           <div class="booking-caption">
-            <span>The patient sees a short and clear path to booking: choose a doctor, see live availability, and confirm the visit in just a few steps.</span>
-            <span>For the clinic, this means a stronger digital service, fewer lost leads, and a higher level of brand trust.</span>
+            <span>The patient does not need to wait for a callback: they choose a doctor, see free time, and book in just a few steps.</span>
+            <span>For the clinic, that means more bookings, fewer lost enquiries, and less pressure on administrators.</span>
           </div>
           <div class="booking-shell">
             <iframe id="booking-frame" src="./dental-widget.html?embedChat=0" title="Dental Booking Widget" loading="lazy"></iframe>
@@ -797,36 +852,36 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>What the clinic receives as a product</h2>
+        <h2>Why this is profitable for the clinic</h2>
         <p>
-          The solution works both as a presentation asset during meetings and as the foundation for a production landing page. It demonstrates not only a refined interface, but also practical business logic that helps the clinic grow in a structured and elegant way.
+          The solution helps the clinic convert more enquiries into bookings without expanding the team and without losing patients because of slow replies.
         </p>
       </div>
 
       <div class="offer-grid">
         <article class="offer-card">
-          <div class="eyebrow">Commercial value</div>
-          <strong>Higher conversion into booked visits</strong>
-          <p>Patients move to action faster because they receive answers, direction, and live availability in one interface.</p>
+          <div class="eyebrow">More revenue</div>
+          <strong>You do not lose warm enquiries</strong>
+          <p>The patient gets an answer immediately and is more likely to book with you instead of going to a competitor.</p>
         </article>
         <article class="offer-card">
-          <div class="eyebrow">Operational value</div>
-          <strong>Automation of first-touch communication</strong>
-          <p>A meaningful share of initial enquiries is handled without sacrificing communication quality or adding pressure to the team.</p>
+          <div class="eyebrow">Less routine</div>
+          <strong>Your team does not drown in repetitive messages</strong>
+          <p>The assistant handles first contact, common questions, and guidance to booking, reducing the load on administrators.</p>
         </article>
         <article class="offer-card">
-          <div class="eyebrow">Product value</div>
-          <strong>Scalable across new clinics</strong>
-          <p>One backend, one logic, and separate branded shells make it easy to adapt the experience for new clinics.</p>
+          <div class="eyebrow">Clear service</div>
+          <strong>The clinic feels faster, more modern, and easier to trust</strong>
+          <p>The first touchpoint becomes stronger: it is easy to ask, easy to get an answer, and easy to book without delay.</p>
         </article>
       </div>
     </section>
 
     <footer class="footer-card card">
       <div>
-        <strong>Ready for a clinic-owner presentation and ready for launch.</strong>
+        <strong>Ready for a clinic-owner presentation: the pain, the solution, and the result are clear from the first screen.</strong>
         <p>
-          This landing works as a commercial showcase for the product: it communicates patient value, strengthens the image of a modern clinic, and demonstrates how a digital concierge can increase bookings without overloading the team.
+          This landing now explains the offer in simple language: the clinic loses patients because replies are too slow, the AI assistant replies instead of the administrator, and the clinic gets more bookings without overloading the team.
         </p>
       </div>
       <div class="footer-badge">Premium AI Concierge</div>
