@@ -481,6 +481,66 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,252,252,0.84));
     }
 
+    .pricing-section {
+      padding-top: 8px;
+    }
+
+    .pricing-card {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      padding: 28px;
+      border-radius: 30px;
+      border: 1px solid rgba(11, 107, 97, 0.14);
+      background:
+        radial-gradient(circle at top right, rgba(215, 155, 45, 0.18), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(246,249,248,0.92));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-copy strong {
+      display: block;
+      margin: 12px 0 10px;
+      font-size: 28px;
+      line-height: 1.08;
+    }
+
+    .pricing-copy p {
+      margin: 0;
+      color: var(--muted);
+      font: 15px/1.75 Arial, sans-serif;
+      max-width: 38rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .price-pill {
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(11, 107, 97, 0.12);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .price-pill span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font: 700 12px/1.2 var(--ui-font);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .price-pill strong {
+      display: block;
+      font-size: 32px;
+      line-height: 1;
+      color: var(--brand-deep);
+    }
+
     .experience-grid {
       display: grid;
       grid-template-columns: 0.9fr 1.1fr;
@@ -608,7 +668,8 @@
       .assurance,
       .proof-grid,
       .offer-grid,
-      .experience-grid {
+      .experience-grid,
+      .pricing-card {
         grid-template-columns: 1fr;
       }
 
@@ -874,6 +935,28 @@
           <strong>The clinic feels faster, more modern, and easier to trust</strong>
           <p>The first touchpoint becomes stronger: it is easy to ask, easy to get an answer, and easy to book without delay.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="section pricing-section">
+      <div class="pricing-card card">
+        <div class="pricing-copy">
+          <div class="eyebrow">Pricing</div>
+          <strong>Clear pricing for a fast launch without a long development cycle.</strong>
+          <p>
+            On a presentation landing page, you can show a simple commercial model right away: a fixed implementation fee and separate monthly support.
+          </p>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-pill">
+            <span>Implementation</span>
+            <strong>140 €</strong>
+          </div>
+          <div class="price-pill">
+            <span>Support</span>
+            <strong>40 € / month</strong>
+          </div>
+        </div>
       </div>
     </section>
 
